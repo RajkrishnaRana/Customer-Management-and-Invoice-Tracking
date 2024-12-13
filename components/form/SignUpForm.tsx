@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z
   .object({
@@ -32,6 +34,9 @@ const formSchema = z
   });
 
 const SignUpForm = () => {
+  const router = useRouter();
+  const { toast } = useToast();
+
   // 1. Define form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,8 +47,33 @@ const SignUpForm = () => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const response = await fetch("/api/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: values.username,
+        email: values.email,
+        password: values.password,
+      }),
+    });
+
+    if (response.ok) {
+      toast({
+        title: "Successfully Registered",
+        description: "Now login with your credential",
+        variant: "default",
+      });
+      router.push("/sign-in");
+    } else {
+      toast({
+        title: "Error",
+        description: "Something wrong with registrations",
+        variant: "destructive",
+      });
+    }
   }
 
   return (
