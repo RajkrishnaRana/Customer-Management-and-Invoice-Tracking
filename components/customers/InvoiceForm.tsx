@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 
-export function InvoiceForm({ invoice, onSubmit, onCancel }) {
+export function InvoiceForm({
+  invoice,
+  onSubmit,
+  onCancel,
+}: {
+  invoice?: any;
+  onSubmit: any;
+  onCancel: any;
+}) {
   const [formData, setFormData] = useState({
     amount: invoice?.amount || "",
     status: invoice?.status || "Unpaid",

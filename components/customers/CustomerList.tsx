@@ -31,7 +31,7 @@ export function CustomerList() {
           </tr>
         </thead>
         <tbody>
-          {customers.map((customer) => (
+          {customers.map((customer: any) => (
             <tr key={customer.id} className="items-center">
               <td className="py-2 px-4 border-b text-center align-middle">
                 {customer.name}

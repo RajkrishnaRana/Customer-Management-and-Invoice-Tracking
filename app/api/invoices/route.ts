@@ -113,7 +113,7 @@ export async function POST(request: Request) {
 
     console.log("Created invoice:", invoice);
     return NextResponse.json(invoice, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     if (error.code === "P2002") {
       // Prisma unique constraint violation
       return NextResponse.json(

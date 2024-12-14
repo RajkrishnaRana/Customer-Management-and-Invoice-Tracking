@@ -71,7 +71,7 @@ export async function PUT(
         externalInvoiceId: externalInvoiceId || null,
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     if (error.code === "P2002") {
       return NextResponse.json(
         { error: "Duplicate externalInvoiceId" },
