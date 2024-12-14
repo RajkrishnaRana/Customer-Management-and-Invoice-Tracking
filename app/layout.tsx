@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Navbar />
-        <main className="h-screen flex flex-col justify-center items-center">
+        <main className="h-screen flex flex-col justify-center items-center mt-24">
           <Provider>{children}</Provider>
         </main>
         <Toaster />

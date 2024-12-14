@@ -51,7 +51,7 @@ const SignInForm = () => {
         variant: "destructive",
       });
     } else {
-      router.push("/admin");
+      router.push("/customers");
       router.refresh();
     }
   }
