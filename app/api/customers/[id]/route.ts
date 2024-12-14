@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const customer = await db.customer.findUnique({
     where: { id: Number(params.id) },
     include: { invoices: true },
@@ -20,10 +18,8 @@ export async function GET(
   return NextResponse.json(customer);
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const body = await request.json();
   const { name, email, externalCustomerId } = body;
 
@@ -35,10 +31,8 @@ export async function PUT(
   return NextResponse.json(customer);
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   await db.customer.delete({
     where: { id: Number(params.id) },
   });

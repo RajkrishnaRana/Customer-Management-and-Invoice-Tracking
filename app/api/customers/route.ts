@@ -23,7 +23,7 @@ export async function POST(request: Request) {
   const { name, email, externalCustomerId } = body;
 
   const customer = await db.customer.create({
-    data: { name, email, externalCustomerId },
+    data: { name, email, externalCustomerId: externalCustomerId || null },
   });
 
   return NextResponse.json(customer);
