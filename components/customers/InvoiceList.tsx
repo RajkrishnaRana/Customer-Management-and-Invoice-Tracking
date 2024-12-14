@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import { InvoiceForm } from "./InvoiceForm";
+import { useToast } from "@/hooks/use-toast";
 
 export function InvoiceList({ customerId, invoices: initialInvoices }) {
+  const { toast } = useToast();
+
   const [invoices, setInvoices] = useState(initialInvoices);
   const [showForm, setShowForm] = useState(false);
   const [editingInvoice, setEditingInvoice] = useState(null);
@@ -14,6 +17,21 @@ export function InvoiceList({ customerId, invoices: initialInvoices }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...newInvoice, customerId }),
     });
+
+    if (res.ok) {
+      toast({
+        title: "Success",
+        description: "Successfully created a new invoice",
+        variant: "default",
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: "Something went wrong!",
+        variant: "destructive",
+      });
+    }
+
     const savedInvoice = await res.json();
     setInvoices([...invoices, savedInvoice]);
     setShowForm(false);
@@ -25,6 +43,21 @@ export function InvoiceList({ customerId, invoices: initialInvoices }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedInvoice),
     });
+
+    if (res.ok) {
+      toast({
+        title: "Success",
+        description: "Successfully updated a invoice",
+        variant: "default",
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: "Something went wrong!",
+        variant: "destructive",
+      });
+    }
+
     const savedInvoice = await res.json();
     setInvoices(
       invoices.map((inv) => (inv.id === savedInvoice.id ? savedInvoice : inv))
@@ -33,7 +66,22 @@ export function InvoiceList({ customerId, invoices: initialInvoices }) {
   };
 
   const handleDeleteInvoice = async (id) => {
-    await fetch(`/api/invoices/${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/invoices/${id}`, { method: "DELETE" });
+
+    if (res.ok) {
+      toast({
+        title: "Success",
+        description: "Successfully deleted a invoice",
+        variant: "default",
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: "Something went wrong!",
+        variant: "destructive",
+      });
+    }
+
     setInvoices(invoices.filter((inv) => inv.id !== id));
   };
 
@@ -55,23 +103,33 @@ export function InvoiceList({ customerId, invoices: initialInvoices }) {
       <table className="min-w-full bg-white">
         <thead>
           <tr>
-            <th className="py-2 px-4 border-b">Amount</th>
-            <th className="py-2 px-4 border-b">Status</th>
-            <th className="py-2 px-4 border-b">Due Date</th>
-            <th className="py-2 px-4 border-b">Actions</th>
+            <th className="py-2 px-4 border-b text-center align-middle">
+              Amount
+            </th>
+            <th className="py-2 px-4 border-b text-center align-middle">
+              Status
+            </th>
+            <th className="py-2 px-4 border-b text-center align-middle">
+              Due Date
+            </th>
+            <th className="py-2 px-4 border-b text-center align-middle">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>
           {invoices.map((invoice) => (
             <tr key={invoice.id}>
-              <td className="py-2 px-4 border-b">
-                ${invoice.amount.toFixed(2)}
+              <td className="py-2 px-4 border-b text-center align-middle">
+                ₹{invoice.amount.toFixed(2)}
               </td>
-              <td className="py-2 px-4 border-b">{invoice.status}</td>
-              <td className="py-2 px-4 border-b">
+              <td className="py-2 px-4 border-b text-center align-middle">
+                {invoice.status}
+              </td>
+              <td className="py-2 px-4 border-b text-center align-middle">
                 {new Date(invoice.dueDate).toLocaleDateString()}
               </td>
-              <td className="py-2 px-4 border-b">
+              <td className="py-2 px-4 border-b text-center align-middle">
                 <button
                   onClick={() => setEditingInvoice(invoice)}
                   className="text-blue-500 hover:underline mr-2"

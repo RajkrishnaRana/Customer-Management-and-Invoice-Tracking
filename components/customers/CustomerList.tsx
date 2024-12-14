@@ -32,10 +32,14 @@ export function CustomerList() {
         </thead>
         <tbody>
           {customers.map((customer) => (
-            <tr key={customer.id}>
-              <td className="py-2 px-4 border-b">{customer.name}</td>
-              <td className="py-2 px-4 border-b">{customer.email}</td>
-              <td className="py-2 px-4 border-b">
+            <tr key={customer.id} className="items-center">
+              <td className="py-2 px-4 border-b text-center align-middle">
+                {customer.name}
+              </td>
+              <td className="py-2 px-4 border-b text-center align-middle">
+                {customer.email}
+              </td>
+              <td className="py-2 px-4 border-b text-center align-middle">
                 <Link
                   href={`/customers/${customer.id}`}
                   className="text-blue-500 hover:underline"
